@@ -1,6 +1,5 @@
-use crate::ToTokenTree;
-use crate::ToTokens;
-#[cfg(feature = "proc-macro2")]
+use crate::IntoTokenTree;
+use crate::IntoTokens;
 use crate::maybe_span::MaybeSpan;
 
 /// Into Stream or Tree.
@@ -9,21 +8,21 @@ pub(crate) trait IntoST<T> {
 }
 
 #[cfg(feature = "proc-macro")]
-impl<V: ToTokens> IntoST<()> for (V, &mut proc_macro::TokenStream) {
+impl<V: IntoTokens> IntoST<()> for (V, &mut proc_macro::TokenStream) {
     fn into_st(self) -> () {
         V::into_tokens(self.0, self.1)
     }
 }
 
 #[cfg(feature = "proc-macro")]
-impl<V: ToTokens> IntoST<proc_macro::TokenStream> for V {
+impl<V: IntoTokens> IntoST<proc_macro::TokenStream> for V {
     fn into_st(self) -> proc_macro::TokenStream {
         self.into_token_stream()
     }
 }
 
 #[cfg(feature = "proc-macro")]
-impl<V: ToTokenTree> IntoST<proc_macro::TokenTree> for V {
+impl<V: IntoTokenTree> IntoST<proc_macro::TokenTree> for V {
     fn into_st(self) -> proc_macro::TokenTree {
         self.into_token_tree()
     }
@@ -37,21 +36,21 @@ impl<V: MaybeSpan> IntoST<proc_macro::Span> for V {
 }
 
 #[cfg(feature = "proc-macro2")]
-impl<V: ToTokens> IntoST<()> for (V, &mut proc_macro2::TokenStream) {
+impl<V: IntoTokens> IntoST<()> for (V, &mut proc_macro2::TokenStream) {
     fn into_st(self) -> () {
         V::into_tokens2(self.0, self.1)
     }
 }
 
 #[cfg(feature = "proc-macro2")]
-impl<V: ToTokens> IntoST<proc_macro2::TokenStream> for V {
+impl<V: IntoTokens> IntoST<proc_macro2::TokenStream> for V {
     fn into_st(self) -> proc_macro2::TokenStream {
         self.into_token_stream2()
     }
 }
 
 #[cfg(feature = "proc-macro2")]
-impl<V: ToTokenTree> IntoST<proc_macro2::TokenTree> for V {
+impl<V: IntoTokenTree> IntoST<proc_macro2::TokenTree> for V {
     fn into_st(self) -> proc_macro2::TokenTree {
         self.into_token_tree2()
     }
