@@ -223,19 +223,22 @@ macro_rules! quote_token {
         $crate::tokens::token::Colon2
     };
     (( $($content:tt)* )) => {
-        $crate::tokens::Parenthesis(
-            $crate::quote!($($content)*)
-        )
+        $crate::tokens::Parenthesis {
+            stream: $crate::quote!($($content)*),
+            delimiter_span: $crate::maybe_span::NoSpan,
+        }
     };
     ([ $($content:tt)* ]) => {
-        $crate::tokens::Bracket(
-            $crate::quote!($($content)*)
-        )
+        $crate::tokens::Bracket {
+            stream: $crate::quote!($($content)*),
+            delimiter_span: $crate::maybe_span::NoSpan,
+        }
     };
     ({ $($content:tt)* }) => {
-        $crate::tokens::Brace(
-            $crate::quote!($($content)*)
-        )
+        $crate::tokens::Brace {
+            stream: $crate::quote!($($content)*),
+            delimiter_span: $crate::maybe_span::NoSpan,
+        }
     };
     (#) => {
         $crate::tokens::punct::Pound
@@ -406,6 +409,30 @@ macro_rules! impl_many {
             $impl_body
         )+
     };
+    ({
+        $defs:tt
+        $($imps:tt)*
+    }) => {
+        crate::impl_many! {
+            @__defs
+            $defs
+            {$($imps)*}
+        }
+    };
+    (@__defs { $({$($defs:tt)*})+ } $imps:tt) => {
+        $(
+            const _: () = {
+                $($defs)*
+
+                crate::impl_many! {
+                    @__unwrap $imps
+                }
+            };
+        )+
+    };
+    (@__unwrap {$($t:tt)*}) => {
+        $($t)*
+    }
 }
 
 macro_rules! impl_to_tokens {
@@ -659,8 +686,8 @@ macro_rules! expand_or {
 }
 
 use {
-    expand_or, impl_into_token_tree, impl_into_tokens, impl_ref_with_span, impl_to_token_tree,
-    impl_to_tokens,
+    expand_or, impl_into_token_tree, impl_into_tokens, impl_many, impl_ref_with_span,
+    impl_to_token_tree, impl_to_tokens,
 };
 
 #[cfg(todo)]

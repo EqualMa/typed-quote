@@ -2,7 +2,7 @@ use std::marker::PhantomData;
 
 use crate::{
     IntoTokenTree, IntoTokens, RefWithSpan, ToTokenTree, ToTokens, WithSpan,
-    into_st::IntoST as _,
+    into_st::IntoST,
     maybe_span::{MaybeSpan, NoSpan},
     sealed,
 };
@@ -12,13 +12,23 @@ pub struct Empty;
 mod empty;
 
 // region: group
+#[derive(Debug, Clone, Copy)]
+pub struct Parenthesis<T, S: MaybeSpan = NoSpan> {
+    pub stream: T,
+    pub delimiter_span: S,
+}
+#[derive(Debug, Clone, Copy)]
+pub struct Bracket<T, S: MaybeSpan = NoSpan> {
+    pub stream: T,
+    pub delimiter_span: S,
+}
+#[derive(Debug, Clone, Copy)]
+pub struct Brace<T, S: MaybeSpan = NoSpan> {
+    pub stream: T,
+    pub delimiter_span: S,
+}
 
-pub struct Parenthesis<Inner>(pub Inner);
-pub struct ParenthesisWithSpan<Inner, Span: crate::Span>(pub Inner, pub Span);
-pub struct Bracket<Inner>(pub Inner);
-pub struct BracketWithSpan<Inner, Span: crate::Span>(pub Inner, pub Span);
-pub struct Brace<Inner>(pub Inner);
-pub struct BraceWithSpan<Inner, Span: crate::Span>(pub Inner, pub Span);
+mod group;
 
 // endregion
 // region: Ident & Lifetime
