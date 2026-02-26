@@ -1,0 +1,12 @@
+[package]
+name = "typed-quote"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+proc-macro2 = { version = "1.0.106", default-features = false, optional = true }
+
+[features]
+default = ["proc-macro", "proc-macro2"]
+proc-macro = ["proc-macro2?/proc-macro"]
+proc-macro2 = ["dep:proc-macro2"]
