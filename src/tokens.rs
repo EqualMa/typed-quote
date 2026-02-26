@@ -59,10 +59,19 @@ pub struct ConcatWithReplacedSpan<A: IntoTokens, B: IntoTokens, S: crate::Span>(
 mod concat;
 // endregion
 // region: iter
-pub struct IterTokenStream<I>(pub I);
-pub struct IterTokenStreamWithDefaultSpan<I, S>(pub I, pub S);
-pub struct IterTokenStreamWithReplacedSpan<I, S>(pub I, pub S);
-mod iter;
+#[derive(Debug, Clone, Copy)]
+pub struct IterTokens<I: IntoIterator<Item: IntoTokens>>(pub I);
+#[derive(Debug, Clone, Copy)]
+pub struct IterTokensWithDefaultSpan<I: IntoIterator<Item: IntoTokens>, S: crate::Span>(
+    pub I,
+    pub S,
+);
+#[derive(Debug, Clone, Copy)]
+pub struct IterTokensWithReplacedSpan<I: IntoIterator<Item: IntoTokens>, S: crate::Span>(
+    pub I,
+    pub S,
+);
+mod iter_tokens;
 // endregion
 // https://doc.rust-lang.org/stable/src/proc_macro/lib.rs.html#959
 #[cfg(todo)]
