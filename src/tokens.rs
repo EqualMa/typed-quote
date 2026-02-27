@@ -83,83 +83,9 @@ pub struct IterTokensWithReplacedSpan<I: IntoIterator<Item: IntoTokens>, S: crat
 );
 mod iter_tokens;
 // endregion
-// https://doc.rust-lang.org/stable/src/proc_macro/lib.rs.html#959
-#[cfg(todo)]
-pub mod punct {
 
-    mod pm1 {
-        pub use proc_macro::{Span, TokenTree};
-    }
-
-    macro_rules! punct {
-        (
-            #$attr:tt
-            type $This:ident = each_of![
-                $($PUNCT_value:literal as $Punct:ident),+ $(,)?
-            ];
-            const _: () = $impl_body:tt ;
-        ) => {
-            $(
-                #$attr
-                pub struct $Punct;
-            )+
-            $(
-                const _: () = {
-                    type $This = $Punct;
-                    const $This : char = $PUNCT_value;
-
-                    $impl_body
-                };
-            )+
-        };
-    }
-
-    punct!(
-        #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
-        type PUNCT = each_of![
-            //
-            '=' as Eq,
-            ',' as Comma,
-            ';' as Semi,
-            ':' as Colon,
-            '!' as Bang,
-        ];
-        const _: () = {
-            fn punct() -> proc_macro::Punct {
-                proc_macro::Punct::new(PUNCT, proc_macro::Spacing::Alone)
-            }
-
-            impl pm1::WithSpan for PUNCT {
-                type WithDefaultSpan = Self::WithReplacedSpan;
-
-                fn with_default_span(self, span: pm1::Span) -> Self::WithDefaultSpan {
-                    self.with_replaced_span(span)
-                }
-
-                type WithReplacedSpan = pm1::WithReplacedSpan<Self>;
-
-                fn with_replaced_span(self, span: pm1::Span) -> Self::WithReplacedSpan {
-                    pm1::WithReplacedSpan(self, span)
-                }
-            }
-
-            impl pm1::IntoTokenTree for PUNCT {
-                fn into_token_tree(self) -> pm1::TokenTree {
-                    pm1::TokenTree::Punct(punct())
-                }
-            }
-
-            impl pm1::IntoTokenTree for pm1::WithReplacedSpan<PUNCT> {
-                fn into_token_tree(self) -> pm1::TokenTree {
-                    let Self(_, span) = self;
-                    let mut tt = punct();
-                    tt.set_span(span);
-                    pm1::TokenTree::Punct(tt)
-                }
-            }
-        };
-    );
-}
+/// Sub set of [`const LEGAL_CHARS`](https://doc.rust-lang.org/stable/src/proc_macro/lib.rs.html#959).
+pub mod punct;
 
 pub mod puncts;
 
