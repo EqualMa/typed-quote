@@ -13,6 +13,9 @@ pub trait MaybeSpan: Copy + crate::sealed::MaybeSpan {
     #[cfg(feature = "proc-macro")]
     fn make_group2(self, g: proc_macro2::Group) -> proc_macro2::Group;
 
+    type Span: crate::Span;
+    fn try_into_span(self) -> Option<Self::Span>;
+
     type WithDefaultSpan<S: crate::Span>: crate::Span;
     fn with_default_span<S: crate::Span>(self, span: S) -> Self::WithDefaultSpan<S>;
 
@@ -77,6 +80,11 @@ impl MaybeSpan for NoSpan {
     #[cfg(feature = "proc-macro2")]
     fn make_group2(self, g: proc_macro2::Group) -> proc_macro2::Group {
         g
+    }
+
+    type Span = crate::Never;
+    fn try_into_span(self) -> Option<Self::Span> {
+        None
     }
 
     type WithDefaultSpan<S: crate::Span> = S;

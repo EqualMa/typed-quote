@@ -388,6 +388,15 @@ pub mod maybe_span;
 
 pub mod tokens;
 
+#[derive(Debug, Clone, Copy)]
+pub enum Never {}
+
+#[derive(Debug, Clone, Copy)]
+pub enum Either<A, B> {
+    A(A),
+    B(B),
+}
+
 macro_rules! impl_many {
     (
         impl<__> $Trait:ident for each_of![
