@@ -2,6 +2,23 @@ use std::fmt;
 
 use super::*;
 
+impl<T: HasConstIdent + ?Sized> ConstIdent<T> {
+    pub const fn new() -> Self {
+        Self(PhantomData, NoSpan)
+    }
+}
+
+// not public api
+pub enum Underscore {}
+
+impl HasConstIdent for Underscore {
+    const IDENT: Ident<'static> = Ident("_", NoSpan);
+}
+
+impl ConstIdent<Underscore> {
+    pub const UNDERSCORE: Self = Self::new();
+}
+
 impl<T: HasConstIdent + ?Sized, S: MaybeSpan> Copy for ConstIdent<T, S> {}
 impl<T: HasConstIdent + ?Sized, S: MaybeSpan> Clone for ConstIdent<T, S> {
     fn clone(&self) -> Self {

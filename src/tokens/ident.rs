@@ -1,18 +1,24 @@
 use super::*;
 
 impl<'a, S: MaybeSpan> Ident<'a, S> {
-    fn is_raw(&self) -> bool {
-        self.0.starts_with("r#")
+    fn to_raw(&self) -> (bool, &'a str) {
+        match self.0.strip_prefix("r#") {
+            Some(ident) => (true, ident),
+            None => (false, self.0),
+        }
     }
 }
 
 impl<'a, S: MaybeSpan> sealed::IntoTokenTree for Ident<'a, S> {}
 impl<'a, S: MaybeSpan> IntoTokenTree for Ident<'a, S> {
-    crate::impl_into_token_tree!(|self| pm::TokenTree::Ident(if self.is_raw() {
-        pm::Ident::new(self.0, self.1.into_st())
-    } else {
-        pm::Ident::new_raw(self.0, self.1.into_st())
-    }));
+    crate::impl_into_token_tree!(|self| {
+        let (is_raw, ident) = self.to_raw();
+        pm::TokenTree::Ident(if is_raw {
+            pm::Ident::new_raw(ident, self.1.into_st())
+        } else {
+            pm::Ident::new(ident, self.1.into_st())
+        })
+    });
 }
 
 impl<'a, S: MaybeSpan> sealed::ToTokenTree for Ident<'a, S> {}

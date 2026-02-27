@@ -89,13 +89,4 @@ pub mod punct;
 
 pub mod puncts;
 
-pub mod __private {
-    pub use core::stringify;
-
-    use super::Ident;
-
-    /// `ident` must be `stringify!($ident)` where `$ident:ident`
-    pub const fn ident(ident: &'static str) -> Ident<'static> {
-        Ident(ident, super::NoSpan)
-    }
-}
+pub mod __private;

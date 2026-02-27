@@ -372,8 +372,8 @@ macro_rules! quote_token {
     ($lifetime:lifetime) => {{
         enum Lifetime {}
 
-        impl $crate::tokens::HasConstLifetime {
-            const LIFETIME: $crate::tokens::Lifetime =
+        impl $crate::tokens::HasConstLifetime for Lifetime {
+            const LIFETIME: $crate::tokens::Lifetime<'static> =
                 $crate::tokens::__private::lifetime($crate::tokens::__private::stringify!($lifetime));
         }
 
