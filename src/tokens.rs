@@ -161,6 +161,8 @@ pub mod punct {
     );
 }
 
+pub mod puncts;
+
 pub mod __private {
     pub use core::stringify;
 

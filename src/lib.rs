@@ -220,7 +220,7 @@ macro_rules! quote_token {
         $crate::tokens::ConstIdent::<Ident>::new()
     }};
     (::) => {
-        $crate::tokens::token::Colon2
+        $crate::tokens::puncts::Colon2
     };
     (( $($content:tt)* )) => {
         $crate::tokens::Parenthesis {
@@ -259,16 +259,16 @@ macro_rules! quote_token {
         $crate::tokens::punct::Add
     };
     (+=) => {
-        $crate::tokens::punct_group::AddEq
+        $crate::tokens::puncts::AddEq
     };
     (&) => {
         $crate::tokens::punct::And
     };
     (&&) => {
-        $crate::tokens::punct_group::AndAnd
+        $crate::tokens::puncts::AndAnd
     };
     (&=) => {
-        $crate::tokens::punct_group::AndEq
+        $crate::tokens::puncts::AndEq
     };
     (@) => {
         $crate::tokens::punct::At
@@ -280,85 +280,85 @@ macro_rules! quote_token {
         $crate::tokens::punct::Caret
     };
     (^=) => {
-        $crate::tokens::punct_group::CaretEq
+        $crate::tokens::puncts::CaretEq
     };
     (/) => {
         $crate::tokens::punct::Div
     };
     (/=) => {
-        $crate::tokens::punct_group::DivEq
+        $crate::tokens::puncts::DivEq
     };
     (..) => {
-        $crate::tokens::punct_group::Dot2
+        $crate::tokens::puncts::Dot2
     };
     (...) => {
-        $crate::tokens::punct_group::Dot3
+        $crate::tokens::puncts::Dot3
     };
     (..=) => {
-        $crate::tokens::punct_group::DotDotEq
+        $crate::tokens::puncts::DotDotEq
     };
     (=) => {
         $crate::tokens::punct::Eq
     };
     (==) => {
-        $crate::tokens::punct_group::EqEq
+        $crate::tokens::puncts::EqEq
     };
     (>=) => {
-        $crate::tokens::punct_group::Ge
+        $crate::tokens::puncts::Ge
     };
     (>) => {
         $crate::tokens::punct::Gt
     };
     (<=) => {
-        $crate::tokens::punct_group::Le
+        $crate::tokens::puncts::Le
     };
     (<) => {
         $crate::tokens::punct::Lt
     };
     (*=) => {
-        $crate::tokens::punct_group::MulEq
+        $crate::tokens::puncts::MulEq
     };
     (!=) => {
-        $crate::tokens::punct_group::Ne
+        $crate::tokens::puncts::Ne
     };
     (|) => {
         $crate::tokens::punct::Or
     };
     (|=) => {
-        $crate::tokens::punct_group::OrEq
+        $crate::tokens::puncts::OrEq
     };
     (||) => {
-        $crate::tokens::punct_group::OrOr
+        $crate::tokens::puncts::OrOr
     };
     (?) => {
         $crate::tokens::punct::Question
     };
     (->) => {
-        $crate::tokens::punct_group::RArrow
+        $crate::tokens::puncts::RArrow
     };
     (<-) => {
-        $crate::tokens::punct_group::LArrow
+        $crate::tokens::puncts::LArrow
     };
     (%) => {
         $crate::tokens::punct::Rem
     };
     (%=) => {
-        $crate::tokens::punct_group::RemEq
+        $crate::tokens::puncts::RemEq
     };
     (=>) => {
-        $crate::tokens::punct_group::FatArrow
+        $crate::tokens::puncts::FatArrow
     };
     (<<) => {
-        $crate::tokens::punct_group::Shl
+        $crate::tokens::puncts::Shl
     };
     (<<=) => {
-        $crate::tokens::punct_group::ShlEq
+        $crate::tokens::puncts::ShlEq
     };
     (>>) => {
-        $crate::tokens::punct_group::Shr
+        $crate::tokens::puncts::Shr
     };
     (>>=) => {
-        $crate::tokens::punct_group::ShrEq
+        $crate::tokens::puncts::ShrEq
     };
     (*) => {
         $crate::tokens::punct::Star
@@ -367,7 +367,7 @@ macro_rules! quote_token {
         $crate::tokens::punct::Sub
     };
     (-=) => {
-        $crate::tokens::punct_group::SubEq
+        $crate::tokens::puncts::SubEq
     };
     ($lifetime:lifetime) => {{
         enum Lifetime {}
@@ -419,8 +419,9 @@ macro_rules! impl_many {
             {$($imps)*}
         }
     };
-    (@__defs { $({$($defs:tt)*})+ } $imps:tt) => {
+    (@__defs { $($(#$def_attr:tt)* {$($defs:tt)*})+ } $imps:tt) => {
         $(
+            $(#$def_attr)*
             const _: () = {
                 $($defs)*
 
