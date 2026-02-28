@@ -1,5 +1,6 @@
 use super::*;
 
+#[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
 trait HasDelimiter<D> {
     const DELIMITER: D;
 }
@@ -8,6 +9,7 @@ crate::impl_many!({
     {
         {
             use Parenthesis as G;
+            #[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
             macro_rules! DELIMITER {
                 ($pm:ident) => {
                     $pm::Delimiter::Parenthesis
@@ -16,6 +18,7 @@ crate::impl_many!({
         }
         {
             use Bracket as G;
+            #[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
             macro_rules! DELIMITER {
                 ($pm:ident) => {
                     $pm::Delimiter::Bracket
@@ -24,6 +27,7 @@ crate::impl_many!({
         }
         {
             use Brace as G;
+            #[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
             macro_rules! DELIMITER {
                 ($pm:ident) => {
                     $pm::Delimiter::Brace

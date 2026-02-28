@@ -25,7 +25,7 @@ impl MaybeSpan for Never {
     fn make_punct2(self, _: proc_macro2::Punct) -> proc_macro2::Punct {
         match self {}
     }
-    #[cfg(feature = "proc-macro")]
+    #[cfg(feature = "proc-macro2")]
     fn make_group2(self, _: proc_macro2::Group) -> proc_macro2::Group {
         match self {}
     }

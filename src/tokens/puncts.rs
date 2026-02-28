@@ -1,10 +1,12 @@
 use super::*;
 
+#[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
 trait Puncts<TS> {
     type Puncts;
     fn puncts(span: impl MaybeSpan) -> Self::Puncts;
 }
 
+#[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
 macro_rules! puncts {
     (($p0:literal, $p1:literal, $p2:literal $(,)?) $span:ident) => {
         puncts![@[$p0 $p1][$p2] $span]
@@ -33,6 +35,7 @@ macro_rules! puncts {
     };
 }
 
+#[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
 macro_rules! count_literals {
     ($($a:literal),+ $(,)?) => {
         const { [$($a,)+].len() }

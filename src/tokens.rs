@@ -2,10 +2,12 @@ use std::marker::PhantomData;
 
 use crate::{
     IntoTokenTree, IntoTokens, RefWithSpan, ToTokenTree, ToTokens, WithSpan,
-    into_st::IntoST,
     maybe_span::{MaybeSpan, NoSpan},
     sealed,
 };
+
+#[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
+use crate::into_st::IntoST;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Empty;

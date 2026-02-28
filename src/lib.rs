@@ -4,7 +4,7 @@ extern crate proc_macro;
 #[cfg(feature = "proc-macro")]
 use proc_macro::{TokenStream, TokenTree};
 
-#[cfg(feature = "proc-macro")]
+#[cfg(feature = "proc-macro2")]
 use proc_macro2::{TokenStream as TokenStream2, TokenTree as TokenTree2};
 
 pub trait IntoTokens: sealed::IntoTokens {
@@ -33,33 +33,41 @@ pub trait ToTokens: IntoTokens + sealed::ToTokens {
 
 impl<T: ?Sized + ToTokens> sealed::ToTokens for &T {}
 impl<T: ?Sized + ToTokens> ToTokens for &T {
+    #[cfg(feature = "proc-macro")]
     fn to_tokens(&self, tokens: &mut TokenStream) {
         T::to_tokens(self, tokens)
     }
 
+    #[cfg(feature = "proc-macro")]
     fn to_token_stream(&self) -> TokenStream {
         T::to_token_stream(self)
     }
 
+    #[cfg(feature = "proc-macro2")]
     fn to_tokens2(&self, tokens: &mut TokenStream2) {
         T::to_tokens2(self, tokens)
     }
 
+    #[cfg(feature = "proc-macro2")]
     fn to_token_stream2(&self) -> TokenStream2 {
         T::to_token_stream2(self)
     }
 }
 impl<T: ?Sized + ToTokens> sealed::IntoTokens for &T {}
 impl<T: ?Sized + ToTokens> IntoTokens for &T {
+    #[cfg(feature = "proc-macro")]
     fn into_tokens(self, tokens: &mut TokenStream) {
         T::to_tokens(self, tokens)
     }
+    #[cfg(feature = "proc-macro")]
     fn into_token_stream(self) -> TokenStream {
         T::to_token_stream(self)
     }
+    #[cfg(feature = "proc-macro2")]
     fn into_tokens2(self, tokens: &mut TokenStream2) {
         T::to_tokens2(self, tokens)
     }
+    #[cfg(feature = "proc-macro2")]
     fn into_token_stream2(self) -> TokenStream2 {
         T::to_token_stream2(self)
     }
@@ -221,7 +229,7 @@ mod sealed {
     }
 
     #[cfg(not(feature = "proc-macro"))]
-    #[cfg(not(feature = "proc-macro"))]
+    #[cfg(not(feature = "proc-macro2"))]
     pub trait Span {}
 
     pub trait WithSpan {}
@@ -748,6 +756,7 @@ use {
     impl_to_token_tree, impl_to_tokens,
 };
 
+#[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
 mod into_st;
 
 #[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]

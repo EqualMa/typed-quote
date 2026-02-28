@@ -194,7 +194,7 @@ crate::impl_many!({
             punct.set_span(self.into());
             punct
         }
-        #[cfg(feature = "proc-macro")]
+        #[cfg(feature = "proc-macro2")]
         fn make_group2(self, mut g: proc_macro2::Group) -> proc_macro2::Group {
             g.set_span(self.into());
             g

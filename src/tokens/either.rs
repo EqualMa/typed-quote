@@ -2,6 +2,7 @@ use crate::{Either, Span};
 
 use super::*;
 
+#[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
 macro_rules! either {
     ($v:expr, |$var:pat_param|$out:expr) => {
         match $v {
@@ -49,7 +50,7 @@ impl<A: MaybeSpan, B: MaybeSpan> MaybeSpan for Either<A, B> {
     fn make_punct2(self, punct: proc_macro2::Punct) -> proc_macro2::Punct {
         either!(self, |v| v.make_punct2(punct))
     }
-    #[cfg(feature = "proc-macro")]
+    #[cfg(feature = "proc-macro2")]
     fn make_group2(self, g: proc_macro2::Group) -> proc_macro2::Group {
         either!(self, |v| v.make_group2(g))
     }

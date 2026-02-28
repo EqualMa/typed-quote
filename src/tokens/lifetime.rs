@@ -1,5 +1,6 @@
 use super::*;
 
+#[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
 impl<'a, S: MaybeSpan> Lifetime<'a, S> {
     const fn ident(&self) -> Ident<'a, S> {
         Ident(self.0.split_at(1).1, self.1)

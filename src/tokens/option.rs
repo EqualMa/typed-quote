@@ -37,7 +37,7 @@ impl<T: MaybeSpan> MaybeSpan for Option<T> {
             punct
         }
     }
-    #[cfg(feature = "proc-macro")]
+    #[cfg(feature = "proc-macro2")]
     fn make_group2(self, g: proc_macro2::Group) -> proc_macro2::Group {
         if let Some(span) = self {
             span.make_group2(g)

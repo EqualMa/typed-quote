@@ -31,6 +31,7 @@ macro_rules! punct {
             #$attr
             pub struct $Punct<S: MaybeSpan>(pub S);
 
+            #[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
             impl $Punct<NoSpan> {
                 const CHAR: char = $PUNCT_value;
             }

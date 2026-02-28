@@ -12,7 +12,7 @@ pub trait MaybeSpan: Copy + crate::sealed::MaybeSpan {
     #[cfg(feature = "proc-macro2")]
     fn make_punct2(self, punct: proc_macro2::Punct) -> proc_macro2::Punct;
     /// Only changes span of delimiter
-    #[cfg(feature = "proc-macro")]
+    #[cfg(feature = "proc-macro2")]
     fn make_group2(self, g: proc_macro2::Group) -> proc_macro2::Group;
 
     type Span: crate::Span;
