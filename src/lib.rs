@@ -276,7 +276,7 @@ macro_rules! quote_token {
         $crate::tokens::ConstIdent::<Ident>::new()
     }};
     (::) => {
-        $crate::tokens::puncts::Colon2
+        $crate::tokens::puncts::Colon2($crate::maybe_span::NoSpan)
     };
     (( $($content:tt)* )) => {
         $crate::tokens::Parenthesis {
@@ -297,133 +297,133 @@ macro_rules! quote_token {
         }
     };
     (#) => {
-        $crate::tokens::punct::Pound
+        $crate::tokens::punct::Pound($crate::maybe_span::NoSpan)
     };
     (,) => {
-        $crate::tokens::punct::Comma
+        $crate::tokens::punct::Comma($crate::maybe_span::NoSpan)
     };
     (.) => {
-        $crate::tokens::punct::Dot
+        $crate::tokens::punct::Dot($crate::maybe_span::NoSpan)
     };
     (;) => {
-        $crate::tokens::punct::Semi
+        $crate::tokens::punct::Semi($crate::maybe_span::NoSpan)
     };
     (:) => {
-        $crate::tokens::punct::Colon
+        $crate::tokens::punct::Colon($crate::maybe_span::NoSpan)
     };
     (+) => {
-        $crate::tokens::punct::Add
+        $crate::tokens::punct::Add($crate::maybe_span::NoSpan)
     };
     (+=) => {
-        $crate::tokens::puncts::AddEq
+        $crate::tokens::puncts::AddEq($crate::maybe_span::NoSpan)
     };
     (&) => {
-        $crate::tokens::punct::And
+        $crate::tokens::punct::And($crate::maybe_span::NoSpan)
     };
     (&&) => {
-        $crate::tokens::puncts::AndAnd
+        $crate::tokens::puncts::AndAnd($crate::maybe_span::NoSpan)
     };
     (&=) => {
-        $crate::tokens::puncts::AndEq
+        $crate::tokens::puncts::AndEq($crate::maybe_span::NoSpan)
     };
     (@) => {
-        $crate::tokens::punct::At
+        $crate::tokens::punct::At($crate::maybe_span::NoSpan)
     };
     (!) => {
-        $crate::tokens::punct::Bang
+        $crate::tokens::punct::Bang($crate::maybe_span::NoSpan)
     };
     (^) => {
-        $crate::tokens::punct::Caret
+        $crate::tokens::punct::Caret($crate::maybe_span::NoSpan)
     };
     (^=) => {
-        $crate::tokens::puncts::CaretEq
+        $crate::tokens::puncts::CaretEq($crate::maybe_span::NoSpan)
     };
     (/) => {
-        $crate::tokens::punct::Div
+        $crate::tokens::punct::Div($crate::maybe_span::NoSpan)
     };
     (/=) => {
-        $crate::tokens::puncts::DivEq
+        $crate::tokens::puncts::DivEq($crate::maybe_span::NoSpan)
     };
     (..) => {
-        $crate::tokens::puncts::Dot2
+        $crate::tokens::puncts::Dot2($crate::maybe_span::NoSpan)
     };
     (...) => {
-        $crate::tokens::puncts::Dot3
+        $crate::tokens::puncts::Dot3($crate::maybe_span::NoSpan)
     };
     (..=) => {
-        $crate::tokens::puncts::DotDotEq
+        $crate::tokens::puncts::DotDotEq($crate::maybe_span::NoSpan)
     };
     (=) => {
-        $crate::tokens::punct::Eq
+        $crate::tokens::punct::Eq($crate::maybe_span::NoSpan)
     };
     (==) => {
-        $crate::tokens::puncts::EqEq
+        $crate::tokens::puncts::EqEq($crate::maybe_span::NoSpan)
     };
     (>=) => {
-        $crate::tokens::puncts::Ge
+        $crate::tokens::puncts::Ge($crate::maybe_span::NoSpan)
     };
     (>) => {
-        $crate::tokens::punct::Gt
+        $crate::tokens::punct::Gt($crate::maybe_span::NoSpan)
     };
     (<=) => {
-        $crate::tokens::puncts::Le
+        $crate::tokens::puncts::Le($crate::maybe_span::NoSpan)
     };
     (<) => {
-        $crate::tokens::punct::Lt
+        $crate::tokens::punct::Lt($crate::maybe_span::NoSpan)
     };
     (*=) => {
-        $crate::tokens::puncts::MulEq
+        $crate::tokens::puncts::MulEq($crate::maybe_span::NoSpan)
     };
     (!=) => {
-        $crate::tokens::puncts::Ne
+        $crate::tokens::puncts::Ne($crate::maybe_span::NoSpan)
     };
     (|) => {
-        $crate::tokens::punct::Or
+        $crate::tokens::punct::Or($crate::maybe_span::NoSpan)
     };
     (|=) => {
-        $crate::tokens::puncts::OrEq
+        $crate::tokens::puncts::OrEq($crate::maybe_span::NoSpan)
     };
     (||) => {
-        $crate::tokens::puncts::OrOr
+        $crate::tokens::puncts::OrOr($crate::maybe_span::NoSpan)
     };
     (?) => {
-        $crate::tokens::punct::Question
+        $crate::tokens::punct::Question($crate::maybe_span::NoSpan)
     };
     (->) => {
-        $crate::tokens::puncts::RArrow
+        $crate::tokens::puncts::RArrow($crate::maybe_span::NoSpan)
     };
     (<-) => {
-        $crate::tokens::puncts::LArrow
+        $crate::tokens::puncts::LArrow($crate::maybe_span::NoSpan)
     };
     (%) => {
-        $crate::tokens::punct::Rem
+        $crate::tokens::punct::Rem($crate::maybe_span::NoSpan)
     };
     (%=) => {
-        $crate::tokens::puncts::RemEq
+        $crate::tokens::puncts::RemEq($crate::maybe_span::NoSpan)
     };
     (=>) => {
-        $crate::tokens::puncts::FatArrow
+        $crate::tokens::puncts::FatArrow($crate::maybe_span::NoSpan)
     };
     (<<) => {
-        $crate::tokens::puncts::Shl
+        $crate::tokens::puncts::Shl($crate::maybe_span::NoSpan)
     };
     (<<=) => {
-        $crate::tokens::puncts::ShlEq
+        $crate::tokens::puncts::ShlEq($crate::maybe_span::NoSpan)
     };
     (>>) => {
-        $crate::tokens::puncts::Shr
+        $crate::tokens::puncts::Shr($crate::maybe_span::NoSpan)
     };
     (>>=) => {
-        $crate::tokens::puncts::ShrEq
+        $crate::tokens::puncts::ShrEq($crate::maybe_span::NoSpan)
     };
     (*) => {
-        $crate::tokens::punct::Star
+        $crate::tokens::punct::Star($crate::maybe_span::NoSpan)
     };
     (-) => {
-        $crate::tokens::punct::Sub
+        $crate::tokens::punct::Sub($crate::maybe_span::NoSpan)
     };
     (-=) => {
-        $crate::tokens::puncts::SubEq
+        $crate::tokens::puncts::SubEq($crate::maybe_span::NoSpan)
     };
     ($lifetime:lifetime) => {{
         enum Lifetime {}
