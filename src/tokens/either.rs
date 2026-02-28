@@ -73,6 +73,21 @@ impl<A: MaybeSpan, B: MaybeSpan> MaybeSpan for Either<A, B> {
     }
 }
 
+#[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
+const _: () = {
+    use crate::replace_span_of::ReplaceSpanOf;
+
+    impl<A: ReplaceSpanOf<T>, B: ReplaceSpanOf<T>, T: IntoTokens + WithSpan> ReplaceSpanOf<T>
+        for Either<A, B>
+    {
+        type ReplaceSpanOf = Either<A::ReplaceSpanOf, B::ReplaceSpanOf>;
+
+        fn replace_span_of(self, t: T) -> Self::ReplaceSpanOf {
+            either_map!(self, |v| v.replace_span_of(t))
+        }
+    }
+};
+
 impl<A: Span, B: Span> sealed::Span for Either<A, B> {}
 impl<A: Span, B: Span> Span for Either<A, B> {}
 

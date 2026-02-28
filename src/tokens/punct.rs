@@ -71,10 +71,13 @@ punct!({
 
     impl<S: MaybeSpan> sealed::IntoTokenTree for PUNCT<S> {}
     impl<S: MaybeSpan> IntoTokenTree for PUNCT<S> {
-        crate::impl_into_token_tree!(|self| pm::TokenTree::Punct(pm::Punct::new(
-            PUNCT::<NoSpan>::CHAR,
-            pm::Spacing::Alone
-        )));
+        crate::impl_into_token_tree!(|self| pm::TokenTree::Punct(
+            (
+                pm::Punct::new(PUNCT::<NoSpan>::CHAR, pm::Spacing::Alone),
+                self.0
+            )
+                .into_st()
+        ));
     }
 
     impl<S: MaybeSpan> sealed::ToTokenTree for PUNCT<S> {}

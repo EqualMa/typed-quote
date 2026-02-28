@@ -72,7 +72,7 @@ pub trait IntoTokenTree: IntoTokens + sealed::IntoTokenTree {
     fn into_token_tree2(self) -> TokenTree2;
 }
 
-pub trait ToTokenTree: ToTokens + sealed::ToTokenTree {
+pub trait ToTokenTree: IntoTokenTree + ToTokens + sealed::ToTokenTree {
     #[cfg(feature = "proc-macro")]
     fn to_token_tree(&self) -> TokenTree;
     #[cfg(feature = "proc-macro2")]
@@ -167,6 +167,9 @@ impl<'a, T: ?Sized + RefWithSpan> WithSpan for &'a T {
 }
 
 mod sealed {
+    #[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
+    use crate::replace_span_of::ReplaceSpanOf;
+
     pub trait IntoTokens {}
     pub trait ToTokens {}
 
@@ -174,6 +177,51 @@ mod sealed {
     pub trait ToTokenTree {}
 
     pub trait MaybeSpan {}
+
+    #[cfg(feature = "proc-macro")]
+    #[cfg(feature = "proc-macro2")]
+    pub trait Span:
+        ReplaceSpanOf<proc_macro::TokenStream>
+        + ReplaceSpanOf<proc_macro::TokenTree>
+        + ReplaceSpanOf<proc_macro::Group>
+        + ReplaceSpanOf<proc_macro::Ident>
+        + ReplaceSpanOf<proc_macro::Punct>
+        + ReplaceSpanOf<proc_macro::Literal>
+        + ReplaceSpanOf<proc_macro2::TokenStream>
+        + ReplaceSpanOf<proc_macro2::TokenTree>
+        + ReplaceSpanOf<proc_macro2::Group>
+        + ReplaceSpanOf<proc_macro2::Ident>
+        + ReplaceSpanOf<proc_macro2::Punct>
+        + ReplaceSpanOf<proc_macro2::Literal>
+    {
+    }
+
+    #[cfg(feature = "proc-macro")]
+    #[cfg(not(feature = "proc-macro2"))]
+    pub trait Span:
+        ReplaceSpanOf<proc_macro::TokenStream>
+        + ReplaceSpanOf<proc_macro::TokenTree>
+        + ReplaceSpanOf<proc_macro::Group>
+        + ReplaceSpanOf<proc_macro::Ident>
+        + ReplaceSpanOf<proc_macro::Punct>
+        + ReplaceSpanOf<proc_macro::Literal>
+    {
+    }
+
+    #[cfg(not(feature = "proc-macro"))]
+    #[cfg(feature = "proc-macro2")]
+    pub trait Span:
+        ReplaceSpanOf<proc_macro2::TokenStream>
+        + ReplaceSpanOf<proc_macro2::TokenTree>
+        + ReplaceSpanOf<proc_macro2::Group>
+        + ReplaceSpanOf<proc_macro2::Ident>
+        + ReplaceSpanOf<proc_macro2::Punct>
+        + ReplaceSpanOf<proc_macro2::Literal>
+    {
+    }
+
+    #[cfg(not(feature = "proc-macro"))]
+    #[cfg(not(feature = "proc-macro"))]
     pub trait Span {}
 
     pub trait WithSpan {}
@@ -700,10 +748,13 @@ use {
     impl_to_token_tree, impl_to_tokens,
 };
 
-#[cfg(todo)]
-mod proc_macro_1;
-
 mod into_st;
+
+#[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
+mod replace_span_of;
+
+#[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
+mod proc_macro_n;
 
 #[cfg(test)]
 mod tests;

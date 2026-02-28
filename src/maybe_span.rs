@@ -3,6 +3,7 @@ pub trait MaybeSpan: Copy + crate::sealed::MaybeSpan {
     fn into_span_or_call_site(self) -> proc_macro::Span;
     #[cfg(feature = "proc-macro")]
     fn make_punct(self, punct: proc_macro::Punct) -> proc_macro::Punct;
+    /// Only changes span of delimiter
     #[cfg(feature = "proc-macro")]
     fn make_group(self, g: proc_macro::Group) -> proc_macro::Group;
 
@@ -10,6 +11,7 @@ pub trait MaybeSpan: Copy + crate::sealed::MaybeSpan {
     fn into_span2_or_call_site(self) -> proc_macro2::Span;
     #[cfg(feature = "proc-macro2")]
     fn make_punct2(self, punct: proc_macro2::Punct) -> proc_macro2::Punct;
+    /// Only changes span of delimiter
     #[cfg(feature = "proc-macro")]
     fn make_group2(self, g: proc_macro2::Group) -> proc_macro2::Group;
 

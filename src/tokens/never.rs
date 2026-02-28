@@ -46,6 +46,15 @@ impl MaybeSpan for Never {
     }
 }
 
+#[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
+impl<T: IntoTokens + WithSpan> crate::replace_span_of::ReplaceSpanOf<T> for Never {
+    type ReplaceSpanOf = Never;
+
+    fn replace_span_of(self, _: T) -> Self::ReplaceSpanOf {
+        match self {}
+    }
+}
+
 impl sealed::Span for Never {}
 impl Span for Never {}
 
