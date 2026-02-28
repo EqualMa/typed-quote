@@ -13,6 +13,11 @@ impl<T> MyInto<T> for T {
     }
 }
 
+#[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
+trait IdentIsDollarCrate {
+    fn ident_is_dollar_crate(&self) -> bool;
+}
+
 #[cfg(feature = "proc-macro")]
 #[cfg(feature = "proc-macro2")]
 mod convert_12;

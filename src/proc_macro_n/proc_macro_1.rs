@@ -1,5 +1,11 @@
 use super::*;
 
+impl IdentIsDollarCrate for proc_macro::Ident {
+    fn ident_is_dollar_crate(&self) -> bool {
+        self.to_string() == "$crate"
+    }
+}
+
 crate::impl_many!({
     {
         {
@@ -24,6 +30,7 @@ crate::impl_many!({
         fn replace_span_of(self, tt: pmn::TokenTree) -> Self::ReplaceSpanOf {
             match tt {
                 pmn::TokenTree::Group(group) => pmn::TokenTree::Group(self.replace_span_of(group)),
+                pmn::TokenTree::Ident(ident) => pmn::TokenTree::Ident(self.replace_span_of(ident)),
                 mut tt => {
                     tt.set_span(self.into());
                     tt
@@ -45,11 +52,19 @@ crate::impl_many!({
         }
     }
 
+    impl ReplaceSpanOf<pmn::Ident> for proc_macro::Span {
+        type ReplaceSpanOf = pmn::Ident;
+        fn replace_span_of(self, mut tt: pmn::Ident) -> Self::ReplaceSpanOf {
+            if tt.ident_is_dollar_crate() {
+                return tt;
+            }
+            tt.set_span(self.into());
+            tt
+        }
+    }
+
     crate::impl_many!({
         {
-            {
-                use pmn::Ident as TT;
-            }
             {
                 use pmn::Punct as TT;
             }
