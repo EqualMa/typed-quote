@@ -80,8 +80,8 @@ crate::impl_many!({
         crate::impl_to_tokens! {tt}
     }
 
-    impl<T: IntoTokens + WithSpan, SO: crate::Span> sealed::WithSpan for G<T, SO> {}
-    impl<T: IntoTokens + WithSpan, SO: crate::Span> WithSpan for G<T, SO> {
+    impl<T: IntoTokens + WithSpan, SO: MaybeSpan> sealed::WithSpan for G<T, SO> {}
+    impl<T: IntoTokens + WithSpan, SO: MaybeSpan> WithSpan for G<T, SO> {
         type WithDefaultSpan<S: crate::Span> = G<T::WithDefaultSpan<S>, SO::WithDefaultSpan<S>>;
 
         fn with_default_span<S: crate::Span>(self, span: S) -> Self::WithDefaultSpan<S> {
@@ -101,8 +101,8 @@ crate::impl_many!({
         }
     }
 
-    impl<T: IntoTokens + RefWithSpan, SO: crate::Span> sealed::RefWithSpan for G<T, SO> {}
-    impl<T: IntoTokens + RefWithSpan, SO: crate::Span> RefWithSpan for G<T, SO> {
+    impl<T: IntoTokens + RefWithSpan, SO: MaybeSpan> sealed::RefWithSpan for G<T, SO> {}
+    impl<T: IntoTokens + RefWithSpan, SO: MaybeSpan> RefWithSpan for G<T, SO> {
         type RefWithDefaultSpan<'a, S: crate::Span>
             = G<T::RefWithDefaultSpan<'a, S>, SO::WithDefaultSpan<S>>
         where
