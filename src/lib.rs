@@ -453,6 +453,8 @@ pub enum Either<A, B> {
     B(B),
 }
 
+pub mod prelude;
+
 macro_rules! impl_many {
     (
         impl<__> $Trait:ident for each_of![
