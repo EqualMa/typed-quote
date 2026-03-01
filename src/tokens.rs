@@ -49,6 +49,10 @@ mod ident;
 pub struct Lifetime<'a, S: MaybeSpan = NoSpan>(&'a str, S);
 mod lifetime;
 
+#[derive(Debug, Clone, Copy)]
+pub struct Literal<'a, S: MaybeSpan = NoSpan>(&'a str, S);
+mod literal;
+
 pub trait HasConstIdent {
     const IDENT: Ident<'static>;
 }
@@ -62,6 +66,13 @@ pub trait HasConstLifetime {
 
 pub struct ConstLifetime<T: HasConstLifetime + ?Sized, S: MaybeSpan = NoSpan>(PhantomData<T>, S);
 mod const_lifetime;
+
+pub trait HasConstLiteral {
+    const LITERAL: Literal<'static>;
+}
+
+pub struct ConstLiteral<T: HasConstLiteral + ?Sized, S: MaybeSpan = NoSpan>(PhantomData<T>, S);
+mod const_literal;
 // endregion
 // region: Concat
 #[derive(Debug, Clone, Copy)]

@@ -6,6 +6,8 @@ pub trait MaybeSpan: Copy + crate::sealed::MaybeSpan {
     /// Only changes span of delimiter
     #[cfg(feature = "proc-macro")]
     fn make_group(self, g: proc_macro::Group) -> proc_macro::Group;
+    #[cfg(feature = "proc-macro")]
+    fn make_literal(self, literal: proc_macro::Literal) -> proc_macro::Literal;
 
     #[cfg(feature = "proc-macro2")]
     fn into_span2_or_call_site(self) -> proc_macro2::Span;
@@ -14,6 +16,8 @@ pub trait MaybeSpan: Copy + crate::sealed::MaybeSpan {
     /// Only changes span of delimiter
     #[cfg(feature = "proc-macro2")]
     fn make_group2(self, g: proc_macro2::Group) -> proc_macro2::Group;
+    #[cfg(feature = "proc-macro2")]
+    fn make_literal2(self, literal: proc_macro2::Literal) -> proc_macro2::Literal;
 
     type Span: crate::Span;
     fn try_into_span(self) -> Option<Self::Span>;
@@ -53,6 +57,20 @@ impl<S: MaybeSpan> crate::into_st::IntoST<proc_macro2::Group> for (proc_macro2::
     }
 }
 
+#[cfg(feature = "proc-macro")]
+impl<S: MaybeSpan> crate::into_st::IntoST<proc_macro::Literal> for (proc_macro::Literal, S) {
+    fn into_st(self) -> proc_macro::Literal {
+        self.1.make_literal(self.0)
+    }
+}
+
+#[cfg(feature = "proc-macro2")]
+impl<S: MaybeSpan> crate::into_st::IntoST<proc_macro2::Literal> for (proc_macro2::Literal, S) {
+    fn into_st(self) -> proc_macro2::Literal {
+        self.1.make_literal2(self.0)
+    }
+}
+
 #[derive(Debug, Clone, Copy)]
 pub struct NoSpan;
 
@@ -70,6 +88,10 @@ impl MaybeSpan for NoSpan {
     fn make_group(self, g: proc_macro::Group) -> proc_macro::Group {
         g
     }
+    #[cfg(feature = "proc-macro")]
+    fn make_literal(self, literal: proc_macro::Literal) -> proc_macro::Literal {
+        literal
+    }
 
     #[cfg(feature = "proc-macro2")]
     fn into_span2_or_call_site(self) -> proc_macro2::Span {
@@ -82,6 +104,10 @@ impl MaybeSpan for NoSpan {
     #[cfg(feature = "proc-macro2")]
     fn make_group2(self, g: proc_macro2::Group) -> proc_macro2::Group {
         g
+    }
+    #[cfg(feature = "proc-macro2")]
+    fn make_literal2(self, literal: proc_macro2::Literal) -> proc_macro2::Literal {
+        literal
     }
 
     type Span = crate::Never;

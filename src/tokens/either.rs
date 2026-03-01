@@ -41,6 +41,10 @@ impl<A: MaybeSpan, B: MaybeSpan> MaybeSpan for Either<A, B> {
     fn make_group(self, g: proc_macro::Group) -> proc_macro::Group {
         either!(self, |v| v.make_group(g))
     }
+    #[cfg(feature = "proc-macro")]
+    fn make_literal(self, literal: proc_macro::Literal) -> proc_macro::Literal {
+        either!(self, |v| v.make_literal(literal))
+    }
 
     #[cfg(feature = "proc-macro2")]
     fn into_span2_or_call_site(self) -> proc_macro2::Span {
@@ -53,6 +57,10 @@ impl<A: MaybeSpan, B: MaybeSpan> MaybeSpan for Either<A, B> {
     #[cfg(feature = "proc-macro2")]
     fn make_group2(self, g: proc_macro2::Group) -> proc_macro2::Group {
         either!(self, |v| v.make_group2(g))
+    }
+    #[cfg(feature = "proc-macro2")]
+    fn make_literal2(self, literal: proc_macro2::Literal) -> proc_macro2::Literal {
+        either!(self, |v| v.make_literal2(literal))
     }
 
     type Span = Either<A::Span, B::Span>;

@@ -189,6 +189,11 @@ crate::impl_many!({
             g.set_span(self.my_into());
             g
         }
+        #[cfg(feature = "proc-macro")]
+        fn make_literal(self, mut literal: proc_macro::Literal) -> proc_macro::Literal {
+            literal.set_span(self.my_into());
+            literal
+        }
 
         #[cfg(feature = "proc-macro2")]
         fn into_span2_or_call_site(self) -> proc_macro2::Span {
@@ -203,6 +208,11 @@ crate::impl_many!({
         fn make_group2(self, mut g: proc_macro2::Group) -> proc_macro2::Group {
             g.set_span(self.into());
             g
+        }
+        #[cfg(feature = "proc-macro2")]
+        fn make_literal2(self, mut literal: proc_macro2::Literal) -> proc_macro2::Literal {
+            literal.set_span(self.into());
+            literal
         }
 
         type Span = Self;

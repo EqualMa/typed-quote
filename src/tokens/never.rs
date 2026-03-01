@@ -16,6 +16,10 @@ impl MaybeSpan for Never {
     fn make_group(self, _: proc_macro::Group) -> proc_macro::Group {
         match self {}
     }
+    #[cfg(feature = "proc-macro")]
+    fn make_literal(self, _: proc_macro::Literal) -> proc_macro::Literal {
+        match self {}
+    }
 
     #[cfg(feature = "proc-macro2")]
     fn into_span2_or_call_site(self) -> proc_macro2::Span {
@@ -27,6 +31,10 @@ impl MaybeSpan for Never {
     }
     #[cfg(feature = "proc-macro2")]
     fn make_group2(self, _: proc_macro2::Group) -> proc_macro2::Group {
+        match self {}
+    }
+    #[cfg(feature = "proc-macro2")]
+    fn make_literal2(self, _: proc_macro2::Literal) -> proc_macro2::Literal {
         match self {}
     }
 

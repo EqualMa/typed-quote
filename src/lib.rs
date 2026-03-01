@@ -296,6 +296,14 @@ macro_rules! quote_token {
             delimiter_span: $crate::maybe_span::NoSpan,
         }
     };
+    ($lit:literal) => {{
+        enum Literal {}
+        impl $crate::tokens::HasConstLiteral for Literal {
+            const LITERAL: $crate::tokens::Literal<'static> =
+                $crate::tokens::__private::literal($crate::tokens::__private::stringify!($lit));
+        }
+        $crate::tokens::ConstLiteral::<Literal>::new()
+    }};
     (#) => {
         $crate::tokens::punct::Pound($crate::maybe_span::NoSpan)
     };

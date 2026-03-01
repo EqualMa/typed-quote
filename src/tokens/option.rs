@@ -24,6 +24,14 @@ impl<T: MaybeSpan> MaybeSpan for Option<T> {
             g
         }
     }
+    #[cfg(feature = "proc-macro")]
+    fn make_literal(self, literal: proc_macro::Literal) -> proc_macro::Literal {
+        if let Some(span) = self {
+            span.make_literal(literal)
+        } else {
+            literal
+        }
+    }
 
     #[cfg(feature = "proc-macro2")]
     fn into_span2_or_call_site(self) -> proc_macro2::Span {
@@ -43,6 +51,14 @@ impl<T: MaybeSpan> MaybeSpan for Option<T> {
             span.make_group2(g)
         } else {
             g
+        }
+    }
+    #[cfg(feature = "proc-macro2")]
+    fn make_literal2(self, literal: proc_macro2::Literal) -> proc_macro2::Literal {
+        if let Some(span) = self {
+            span.make_literal2(literal)
+        } else {
+            literal
         }
     }
 
