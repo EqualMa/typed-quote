@@ -66,6 +66,8 @@ punct!({
         Rem('%'),
         Star('*'),
         Sub('-'),
+        Dollar('$'),
+        Tilde('~'),
     ];
 
     use PUNCT;

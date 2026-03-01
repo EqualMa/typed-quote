@@ -438,6 +438,12 @@ macro_rules! quote_token {
     (_) => {
         $crate::tokens::ConstIdent::UNDERSCORE
     };
+    ($) => {
+        $crate::tokens::punct::Dollar($crate::maybe_span::NoSpan)
+    };
+    (~) => {
+        $crate::tokens::punct::Tilde($crate::maybe_span::NoSpan)
+    };
 }
 
 pub mod maybe_span;
