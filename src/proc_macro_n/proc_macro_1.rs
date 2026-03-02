@@ -1,8 +1,66 @@
+use core::fmt::{self};
+
 use super::*;
+
+/// only store first N bytes
+struct Buf<const N: usize> {
+    buf: [u8; N],
+    len: usize,
+}
+
+impl<const N: usize> Buf<N> {
+    fn write_bytes(&mut self, s: &[u8]) {
+        if s.is_empty() {
+            return;
+        }
+
+        'push: {
+            let rest = match self.buf.split_at_mut_checked(self.len) {
+                Some((_, rest)) if rest.len() > 0 => rest,
+                _ => {
+                    break 'push;
+                }
+            };
+
+            let (push_to, push_from) = if rest.len() > s.len() {
+                let (push_to, _) = rest.split_at_mut(s.len());
+                (push_to, s)
+            } else {
+                let (push_from, _) = s.split_at(rest.len());
+                (rest, push_from)
+            };
+
+            push_to.copy_from_slice(push_from);
+        }
+
+        self.len += s.len();
+    }
+}
+
+impl<const N: usize> fmt::Write for Buf<N> {
+    fn write_str(&mut self, s: &str) -> fmt::Result {
+        Ok(self.write_bytes(s.as_bytes()))
+    }
+}
+
+fn is_dollar_crate(v: impl fmt::Display) -> bool {
+    const DOLLAR_CRATE: [u8; 6] = *b"$crate";
+    let mut buf = Buf {
+        buf: [0u8; DOLLAR_CRATE.len()],
+        len: 0,
+    };
+
+    {
+        use core::fmt::Write as _;
+        write!(buf, "{}", v).unwrap();
+    }
+
+    buf.len == const { DOLLAR_CRATE.len() } && matches!(buf.buf, DOLLAR_CRATE)
+}
 
 impl IdentIsDollarCrate for proc_macro::Ident {
     fn ident_is_dollar_crate(&self) -> bool {
-        self.to_string() == "$crate"
+        is_dollar_crate(self)
     }
 }
 
@@ -81,3 +139,6 @@ crate::impl_many!({
         }
     });
 });
+
+#[cfg(test)]
+mod tests;

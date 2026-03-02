@@ -1,3 +1,8 @@
+#![no_std]
+
+#[cfg(feature = "alloc")]
+extern crate alloc;
+
 #[cfg(feature = "proc-macro")]
 extern crate proc_macro;
 

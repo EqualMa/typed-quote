@@ -1,4 +1,4 @@
-use std::marker::PhantomData;
+use core::marker::PhantomData;
 
 use crate::{
     IntoTokenTree, IntoTokens, RefWithSpan, ToTokenTree, ToTokens, WithSpan,
