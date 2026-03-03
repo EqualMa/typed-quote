@@ -1,3 +1,4 @@
+#[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
 use core::str::FromStr;
 
 use super::*;

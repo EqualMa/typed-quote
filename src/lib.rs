@@ -22,6 +22,24 @@ pub trait IntoTokens: sealed::IntoTokens {
     fn into_tokens2(self, tokens: &mut TokenStream2);
     #[cfg(feature = "proc-macro2")]
     fn into_token_stream2(self) -> TokenStream2;
+
+    #[doc(hidden)]
+    #[cfg(feature = "alloc")]
+    #[cfg(feature = "proc-macro")]
+    fn box_into_tokens(self: ::alloc::boxed::Box<Self>, tokens: &mut TokenStream);
+    #[doc(hidden)]
+    #[cfg(feature = "alloc")]
+    #[cfg(feature = "proc-macro")]
+    fn box_into_token_stream(self: ::alloc::boxed::Box<Self>) -> TokenStream;
+
+    #[doc(hidden)]
+    #[cfg(feature = "alloc")]
+    #[cfg(feature = "proc-macro2")]
+    fn box_into_tokens2(self: ::alloc::boxed::Box<Self>, tokens: &mut TokenStream2);
+    #[doc(hidden)]
+    #[cfg(feature = "alloc")]
+    #[cfg(feature = "proc-macro2")]
+    fn box_into_token_stream2(self: ::alloc::boxed::Box<Self>) -> TokenStream2;
 }
 
 pub trait ToTokens: IntoTokens + sealed::ToTokens {
@@ -76,6 +94,8 @@ impl<T: ?Sized + ToTokens> IntoTokens for &T {
     fn into_token_stream2(self) -> TokenStream2 {
         T::to_token_stream2(self)
     }
+
+    crate::impl_box_into_tokens! {}
 }
 
 pub trait IntoTokenTree: IntoTokens + sealed::IntoTokenTree {
@@ -619,6 +639,8 @@ macro_rules! impl_into_tokens {
         fn into_token_stream2(self) -> ::proc_macro2::TokenStream {
             self.into_token_tree2().into()
         }
+
+        crate::impl_box_into_tokens! {}
     };
     (#[proxy] |$self_:ident| $proxy:expr) => {
         crate::impl_into_tokens! {
@@ -675,6 +697,40 @@ macro_rules! impl_into_tokens {
                     ts
                 }
             }
+        }
+
+        crate::impl_box_into_tokens! {}
+    };
+}
+
+macro_rules! impl_box_into_tokens {
+    () => {
+        #[cfg(feature = "alloc")]
+        #[cfg(feature = "proc-macro")]
+        fn box_into_tokens(
+            self: ::alloc::boxed::Box<Self>,
+            tokens: &mut ::proc_macro::TokenStream,
+        ) {
+            Self::into_tokens(*self, tokens)
+        }
+        #[cfg(feature = "alloc")]
+        #[cfg(feature = "proc-macro")]
+        fn box_into_token_stream(self: ::alloc::boxed::Box<Self>) -> ::proc_macro::TokenStream {
+            Self::into_token_stream(*self)
+        }
+
+        #[cfg(feature = "alloc")]
+        #[cfg(feature = "proc-macro2")]
+        fn box_into_tokens2(
+            self: ::alloc::boxed::Box<Self>,
+            tokens: &mut ::proc_macro2::TokenStream,
+        ) {
+            Self::into_tokens2(*self, tokens)
+        }
+        #[cfg(feature = "alloc")]
+        #[cfg(feature = "proc-macro2")]
+        fn box_into_token_stream2(self: ::alloc::boxed::Box<Self>) -> ::proc_macro2::TokenStream {
+            Self::into_token_stream2(*self)
         }
     };
 }
@@ -773,12 +829,15 @@ macro_rules! expand_or {
 }
 
 use {
-    expand_or, impl_into_token_tree, impl_into_tokens, impl_many, impl_ref_with_span,
-    impl_to_token_tree, impl_to_tokens,
+    expand_or, impl_box_into_tokens, impl_into_token_tree, impl_into_tokens, impl_many,
+    impl_ref_with_span, impl_to_token_tree, impl_to_tokens,
 };
 
 #[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
 mod into_st;
+
+#[cfg(feature = "alloc")]
+mod alloc_imp;
 
 #[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
 mod replace_span_of;
