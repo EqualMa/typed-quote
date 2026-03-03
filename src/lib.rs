@@ -1,4 +1,9 @@
 #![no_std]
+#![cfg_attr(docsrs, feature(doc_cfg))]
+#![cfg_attr(any(
+    all(feature = "proc-macro", feature = "proc-macro2"),
+    not(doctest),
+), doc = include_str!("../README.md"))]
 
 #[cfg(feature = "alloc")]
 extern crate alloc;
@@ -12,6 +17,9 @@ use proc_macro::{TokenStream, TokenTree};
 #[cfg(feature = "proc-macro2")]
 use proc_macro2::{TokenStream as TokenStream2, TokenTree as TokenTree2};
 
+/// Into token stream.
+///
+/// *This trait is sealed and all methods are provided.*
 pub trait IntoTokens: sealed::IntoTokens {
     #[cfg(feature = "proc-macro")]
     fn into_tokens(self, tokens: &mut TokenStream);
@@ -42,6 +50,9 @@ pub trait IntoTokens: sealed::IntoTokens {
     fn box_into_token_stream2(self: ::alloc::boxed::Box<Self>) -> TokenStream2;
 }
 
+/// To token stream.
+///
+/// *This trait is sealed and all methods are provided.*
 pub trait ToTokens: IntoTokens + sealed::ToTokens {
     #[cfg(feature = "proc-macro")]
     fn to_tokens(&self, tokens: &mut TokenStream);
@@ -98,6 +109,9 @@ impl<T: ?Sized + ToTokens> IntoTokens for &T {
     crate::impl_box_into_tokens! {}
 }
 
+/// Into a token tree.
+///
+/// *This trait is sealed and all methods are provided.*
 pub trait IntoTokenTree: IntoTokens + sealed::IntoTokenTree {
     #[cfg(feature = "proc-macro")]
     fn into_token_tree(self) -> TokenTree;
@@ -105,6 +119,9 @@ pub trait IntoTokenTree: IntoTokens + sealed::IntoTokenTree {
     fn into_token_tree2(self) -> TokenTree2;
 }
 
+/// To a token tree.
+///
+/// *This trait is sealed and all methods are provided.*
 pub trait ToTokenTree: IntoTokenTree + ToTokens + sealed::ToTokenTree {
     #[cfg(feature = "proc-macro")]
     fn to_token_tree(&self) -> TokenTree;
@@ -137,8 +154,14 @@ impl<T: ?Sized + ToTokenTree> IntoTokenTree for &T {
     }
 }
 
+/// A [`proc_macro::Span`] or [`proc_macro2::Span`].
+///
+/// *This trait is sealed.*
 pub trait Span: sealed::Span + Copy + maybe_span::MaybeSpan {}
 
+/// Into tokens with new span.
+///
+/// *This trait is sealed and all methods are provided.*
 pub trait WithSpan: IntoTokens + sealed::WithSpan {
     type WithDefaultSpan<S: Span>: IntoTokens + WithSpan;
 
@@ -149,6 +172,9 @@ pub trait WithSpan: IntoTokens + sealed::WithSpan {
     fn with_replaced_span<S: Span>(self, span: S) -> Self::WithReplacedSpan<S>;
 }
 
+/// To tokens with new span.
+///
+/// *This trait is sealed and all methods are provided.*
 pub trait RefWithSpan: WithSpan + ToTokens + sealed::RefWithSpan {
     type RefWithDefaultSpan<'a, S: Span>: ToTokens + Copy + RefWithSpan
     where
@@ -203,16 +229,22 @@ mod sealed {
     #[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
     use crate::replace_span_of::ReplaceSpanOf;
 
+    #[doc(hidden)]
     pub trait IntoTokens {}
+    #[doc(hidden)]
     pub trait ToTokens {}
 
+    #[doc(hidden)]
     pub trait IntoTokenTree {}
+    #[doc(hidden)]
     pub trait ToTokenTree {}
 
+    #[doc(hidden)]
     pub trait MaybeSpan {}
 
     #[cfg(feature = "proc-macro")]
     #[cfg(feature = "proc-macro2")]
+    #[doc(hidden)]
     pub trait Span:
         ReplaceSpanOf<proc_macro::TokenStream>
         + ReplaceSpanOf<proc_macro::TokenTree>
@@ -231,6 +263,7 @@ mod sealed {
 
     #[cfg(feature = "proc-macro")]
     #[cfg(not(feature = "proc-macro2"))]
+    #[doc(hidden)]
     pub trait Span:
         ReplaceSpanOf<proc_macro::TokenStream>
         + ReplaceSpanOf<proc_macro::TokenTree>
@@ -243,6 +276,7 @@ mod sealed {
 
     #[cfg(not(feature = "proc-macro"))]
     #[cfg(feature = "proc-macro2")]
+    #[doc(hidden)]
     pub trait Span:
         ReplaceSpanOf<proc_macro2::TokenStream>
         + ReplaceSpanOf<proc_macro2::TokenTree>
@@ -255,9 +289,12 @@ mod sealed {
 
     #[cfg(not(feature = "proc-macro"))]
     #[cfg(not(feature = "proc-macro2"))]
+    #[doc(hidden)]
     pub trait Span {}
 
+    #[doc(hidden)]
     pub trait WithSpan {}
+    #[doc(hidden)]
     pub trait RefWithSpan {}
 }
 

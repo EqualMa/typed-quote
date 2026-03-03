@@ -1,31 +1,48 @@
+/// A [`Span`](crate::Span) or [`NoSpan`].
+///
+/// _This trait is sealed and has **NO public api.**_
 pub trait MaybeSpan: Copy + crate::sealed::MaybeSpan {
+    #[doc(hidden)]
     #[cfg(feature = "proc-macro")]
     fn into_span_or_call_site(self) -> proc_macro::Span;
+    #[doc(hidden)]
     #[cfg(feature = "proc-macro")]
     fn make_punct(self, punct: proc_macro::Punct) -> proc_macro::Punct;
     /// Only changes span of delimiter
+    #[doc(hidden)]
     #[cfg(feature = "proc-macro")]
     fn make_group(self, g: proc_macro::Group) -> proc_macro::Group;
+    #[doc(hidden)]
     #[cfg(feature = "proc-macro")]
     fn make_literal(self, literal: proc_macro::Literal) -> proc_macro::Literal;
 
+    #[doc(hidden)]
     #[cfg(feature = "proc-macro2")]
     fn into_span2_or_call_site(self) -> proc_macro2::Span;
+    #[doc(hidden)]
     #[cfg(feature = "proc-macro2")]
     fn make_punct2(self, punct: proc_macro2::Punct) -> proc_macro2::Punct;
     /// Only changes span of delimiter
+    #[doc(hidden)]
     #[cfg(feature = "proc-macro2")]
     fn make_group2(self, g: proc_macro2::Group) -> proc_macro2::Group;
+    #[doc(hidden)]
     #[cfg(feature = "proc-macro2")]
     fn make_literal2(self, literal: proc_macro2::Literal) -> proc_macro2::Literal;
 
+    #[doc(hidden)]
     type Span: crate::Span;
+    #[doc(hidden)]
     fn try_into_span(self) -> Option<Self::Span>;
 
+    #[doc(hidden)]
     type WithDefaultSpan<S: crate::Span>: crate::Span;
+    #[doc(hidden)]
     fn with_default_span<S: crate::Span>(self, span: S) -> Self::WithDefaultSpan<S>;
 
+    #[doc(hidden)]
     type WithReplacedSpan<S: crate::Span>: crate::Span;
+    #[doc(hidden)]
     fn with_replaced_span<S: crate::Span>(self, span: S) -> Self::WithReplacedSpan<S>;
 }
 

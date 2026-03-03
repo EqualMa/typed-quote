@@ -108,4 +108,5 @@ pub mod punct;
 
 pub mod puncts;
 
+#[doc(hidden)]
 pub mod __private;

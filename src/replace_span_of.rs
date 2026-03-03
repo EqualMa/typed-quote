@@ -1,5 +1,6 @@
 use crate::{IntoTokens, WithSpan};
 
+#[doc(hidden)]
 pub trait ReplaceSpanOf<T: IntoTokens + WithSpan> {
     type ReplaceSpanOf: IntoTokens + WithSpan;
 
