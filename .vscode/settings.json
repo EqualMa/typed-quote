@@ -1,0 +1,5 @@
+{
+  "rust-analyzer.check.command": "clippy",
+  "rust-analyzer.check.extraArgs": ["--", "-W", "clippy::cargo"],
+  "rust-analyzer.cargo.features": "all"
+}
