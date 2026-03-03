@@ -2,6 +2,12 @@ use core::fmt;
 
 use super::*;
 
+impl<T: HasConstLifetime + ?Sized> Default for ConstLifetime<T> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T: HasConstLifetime + ?Sized> ConstLifetime<T> {
     pub const fn new() -> Self {
         Self(PhantomData, NoSpan)

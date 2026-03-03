@@ -2,6 +2,12 @@ use core::fmt;
 
 use super::*;
 
+impl<T: HasConstLiteral + ?Sized> Default for ConstLiteral<T> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T: HasConstLiteral + ?Sized> ConstLiteral<T> {
     pub const fn new() -> Self {
         Self(PhantomData, NoSpan)

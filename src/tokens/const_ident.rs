@@ -2,6 +2,12 @@ use core::fmt;
 
 use super::*;
 
+impl<T: HasConstIdent + ?Sized> Default for ConstIdent<T> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T: HasConstIdent + ?Sized> ConstIdent<T> {
     pub const fn new() -> Self {
         Self(PhantomData, NoSpan)
