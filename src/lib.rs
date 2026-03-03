@@ -163,7 +163,7 @@ pub trait RefWithSpan: WithSpan + ToTokens + sealed::RefWithSpan {
     fn ref_with_replaced_span<S: Span>(&self, span: S) -> Self::RefWithReplacedSpan<'_, S>;
 }
 
-impl<'a, T: ?Sized + RefWithSpan> sealed::RefWithSpan for &'a T {}
+impl<T: ?Sized + RefWithSpan> sealed::RefWithSpan for &T {}
 impl<'this, T: ?Sized + RefWithSpan> RefWithSpan for &'this T {
     type RefWithDefaultSpan<'a, S: Span>
         = T::RefWithDefaultSpan<'this, S>
@@ -184,7 +184,7 @@ impl<'this, T: ?Sized + RefWithSpan> RefWithSpan for &'this T {
     }
 }
 
-impl<'a, T: ?Sized + RefWithSpan> sealed::WithSpan for &'a T {}
+impl<T: ?Sized + RefWithSpan> sealed::WithSpan for &T {}
 impl<'a, T: ?Sized + RefWithSpan> WithSpan for &'a T {
     type WithDefaultSpan<S: Span> = T::RefWithDefaultSpan<'a, S>;
 

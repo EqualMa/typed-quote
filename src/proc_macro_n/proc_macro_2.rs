@@ -21,6 +21,7 @@ crate::impl_many!({
         type ReplaceSpanOf = proc_macro2::TokenStream;
 
         fn replace_span_of(self, t: pmn::TokenStream) -> Self::ReplaceSpanOf {
+            #[allow(clippy::useless_conversion)]
             proc_macro2::TokenStream::from(t)
                 .into_iter()
                 .map(|tt| self.replace_span_of(tt))
@@ -40,6 +41,7 @@ crate::impl_many!({
                     proc_macro2::TokenTree::Ident(self.replace_span_of(ident))
                 }
                 mut tt => {
+                    #[allow(clippy::useless_conversion)]
                     tt.set_span(self.into());
                     tt
                 }

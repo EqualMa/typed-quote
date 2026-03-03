@@ -18,7 +18,7 @@ fn compile_only() {
 #[cfg(feature = "proc-macro2")]
 #[test]
 fn concat() {
-    let ref lit = proc_macro2::Literal::string("hello");
+    let lit = &proc_macro2::Literal::string("hello");
     let ts = quote!(compile_error! { #lit }).into_token_stream2();
     assert_eq!(ts.to_string(), "compile_error ! { \"hello\" }");
 

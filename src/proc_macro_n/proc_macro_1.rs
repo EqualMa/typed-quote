@@ -16,7 +16,7 @@ impl<const N: usize> Buf<N> {
 
         'push: {
             let rest = match self.buf.split_at_mut_checked(self.len) {
-                Some((_, rest)) if rest.len() > 0 => rest,
+                Some((_, rest)) if !rest.is_empty() => rest,
                 _ => {
                     break 'push;
                 }
@@ -39,7 +39,8 @@ impl<const N: usize> Buf<N> {
 
 impl<const N: usize> fmt::Write for Buf<N> {
     fn write_str(&mut self, s: &str) -> fmt::Result {
-        Ok(self.write_bytes(s.as_bytes()))
+        () = self.write_bytes(s.as_bytes());
+        Ok(())
     }
 }
 
@@ -90,6 +91,7 @@ crate::impl_many!({
                 pmn::TokenTree::Group(group) => pmn::TokenTree::Group(self.replace_span_of(group)),
                 pmn::TokenTree::Ident(ident) => pmn::TokenTree::Ident(self.replace_span_of(ident)),
                 mut tt => {
+                    #[allow(clippy::useless_conversion)]
                     tt.set_span(self.into());
                     tt
                 }
@@ -101,6 +103,7 @@ crate::impl_many!({
         type ReplaceSpanOf = pmn::Group;
 
         fn replace_span_of(self, group: pmn::Group) -> Self::ReplaceSpanOf {
+            #[allow(clippy::useless_conversion)]
             let span: pmn::Span = self.into();
             let mut group =
                 pmn::Group::new(group.delimiter(), self.replace_span_of(group.stream()));
@@ -116,6 +119,7 @@ crate::impl_many!({
             if tt.ident_is_dollar_crate() {
                 return tt;
             }
+            #[allow(clippy::useless_conversion)]
             tt.set_span(self.into());
             tt
         }
@@ -133,6 +137,7 @@ crate::impl_many!({
         impl ReplaceSpanOf<TT> for proc_macro::Span {
             type ReplaceSpanOf = TT;
             fn replace_span_of(self, mut tt: TT) -> Self::ReplaceSpanOf {
+                #[allow(clippy::useless_conversion)]
                 tt.set_span(self.into());
                 tt
             }

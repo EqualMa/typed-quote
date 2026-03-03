@@ -42,6 +42,7 @@ crate::impl_many!({
     }
 
     impl sealed::IntoTokens for pmn::TokenStream {}
+    #[allow(clippy::useless_conversion)]
     impl IntoTokens for pmn::TokenStream {
         crate::impl_into_tokens!(
             |self, ts| {
@@ -116,6 +117,7 @@ crate::impl_many!({
         }
 
         impl sealed::IntoTokenTree for TT {}
+        #[allow(clippy::useless_conversion)]
         impl IntoTokenTree for TT {
             crate::impl_into_token_tree!(|self| pmn::TokenTree::from(self).my_into());
         }
@@ -197,20 +199,24 @@ crate::impl_many!({
 
         #[cfg(feature = "proc-macro2")]
         fn into_span2_or_call_site(self) -> proc_macro2::Span {
+            #[allow(clippy::useless_conversion)]
             self.into()
         }
         #[cfg(feature = "proc-macro2")]
         fn make_punct2(self, mut punct: proc_macro2::Punct) -> proc_macro2::Punct {
+            #[allow(clippy::useless_conversion)]
             punct.set_span(self.into());
             punct
         }
         #[cfg(feature = "proc-macro2")]
         fn make_group2(self, mut g: proc_macro2::Group) -> proc_macro2::Group {
+            #[allow(clippy::useless_conversion)]
             g.set_span(self.into());
             g
         }
         #[cfg(feature = "proc-macro2")]
         fn make_literal2(self, mut literal: proc_macro2::Literal) -> proc_macro2::Literal {
+            #[allow(clippy::useless_conversion)]
             literal.set_span(self.into());
             literal
         }

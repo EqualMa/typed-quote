@@ -9,7 +9,7 @@ pub(crate) trait IntoST<T> {
 
 #[cfg(feature = "proc-macro")]
 impl<V: IntoTokens> IntoST<()> for (V, &mut proc_macro::TokenStream) {
-    fn into_st(self) -> () {
+    fn into_st(self) {
         V::into_tokens(self.0, self.1)
     }
 }
@@ -37,7 +37,7 @@ impl<V: MaybeSpan> IntoST<proc_macro::Span> for V {
 
 #[cfg(feature = "proc-macro2")]
 impl<V: IntoTokens> IntoST<()> for (V, &mut proc_macro2::TokenStream) {
-    fn into_st(self) -> () {
+    fn into_st(self) {
         V::into_tokens2(self.0, self.1)
     }
 }

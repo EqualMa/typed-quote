@@ -2,7 +2,7 @@ use super::*;
 
 #[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
 impl<'a, S: MaybeSpan> Ident<'a, S> {
-    fn to_raw(&self) -> (bool, &'a str) {
+    fn to_raw(self) -> (bool, &'a str) {
         match self.0.strip_prefix("r#") {
             Some(ident) => (true, ident),
             None => (false, self.0),
