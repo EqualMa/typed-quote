@@ -2,6 +2,11 @@
 name = "typed-quote"
 version = "0.1.0"
 edition = "2024"
+description = "A fully typed quote!() alternative for both proc-macro and proc-macro2"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/EqualMa/typed-quote/"
+keywords = ["proc-macro", "quote"]
+categories = ["development-tools::procedural-macro-helpers"]
 
 [dependencies]
 proc-macro2 = { version = "1.0.106", default-features = false, optional = true }
