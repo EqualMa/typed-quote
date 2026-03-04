@@ -121,3 +121,98 @@ impl<I: IntoIterator<Item: IntoTokens + WithSpan>, SO: crate::Span> WithSpan
         IterTokensWithReplacedSpan(self.0, span)
     }
 }
+
+impl<I: IntoIterator<Item: IntoTokens + WithSpan> + Clone> sealed::RefWithSpan for IterTokens<I> {}
+impl<I: IntoIterator<Item: IntoTokens + WithSpan> + Clone> RefWithSpan for IterTokens<I> {
+    type RefWithDefaultSpan<'a, S: crate::Span>
+        = IterTokensWithDefaultSpan<clone_into_iter::CloneIntoIter<'a, I>, S>
+    where
+        Self: 'a;
+
+    fn ref_with_default_span<S: crate::Span>(&self, span: S) -> Self::RefWithDefaultSpan<'_, S> {
+        IterTokensWithDefaultSpan(clone_into_iter::CloneIntoIter(&self.0), span)
+    }
+
+    type RefWithReplacedSpan<'a, S: crate::Span>
+        = IterTokensWithReplacedSpan<clone_into_iter::CloneIntoIter<'a, I>, S>
+    where
+        Self: 'a;
+
+    fn ref_with_replaced_span<S: crate::Span>(&self, span: S) -> Self::RefWithReplacedSpan<'_, S> {
+        IterTokensWithReplacedSpan(clone_into_iter::CloneIntoIter(&self.0), span)
+    }
+}
+
+impl<I: IntoIterator<Item: IntoTokens + WithSpan> + Clone, SO: crate::Span> sealed::RefWithSpan
+    for IterTokensWithDefaultSpan<I, SO>
+{
+}
+impl<I: IntoIterator<Item: IntoTokens + WithSpan> + Clone, SO: crate::Span> RefWithSpan
+    for IterTokensWithDefaultSpan<I, SO>
+{
+    type RefWithDefaultSpan<'a, S: crate::Span>
+        = &'a Self
+    where
+        Self: 'a;
+
+    fn ref_with_default_span<S: crate::Span>(&self, _: S) -> Self::RefWithDefaultSpan<'_, S> {
+        self
+    }
+
+    type RefWithReplacedSpan<'a, S: crate::Span>
+        = IterTokensWithReplacedSpan<clone_into_iter::CloneIntoIter<'a, I>, S>
+    where
+        Self: 'a;
+
+    fn ref_with_replaced_span<S: crate::Span>(&self, span: S) -> Self::RefWithReplacedSpan<'_, S> {
+        IterTokensWithReplacedSpan(clone_into_iter::CloneIntoIter(&self.0), span)
+    }
+}
+
+impl<I: IntoIterator<Item: IntoTokens + WithSpan> + Clone, SO: crate::Span> sealed::RefWithSpan
+    for IterTokensWithReplacedSpan<I, SO>
+{
+}
+impl<I: IntoIterator<Item: IntoTokens + WithSpan> + Clone, SO: crate::Span> RefWithSpan
+    for IterTokensWithReplacedSpan<I, SO>
+{
+    type RefWithDefaultSpan<'a, S: crate::Span>
+        = &'a Self
+    where
+        Self: 'a;
+
+    fn ref_with_default_span<S: crate::Span>(&self, _: S) -> Self::RefWithDefaultSpan<'_, S> {
+        self
+    }
+
+    type RefWithReplacedSpan<'a, S: crate::Span>
+        = IterTokensWithReplacedSpan<clone_into_iter::CloneIntoIter<'a, I>, S>
+    where
+        Self: 'a;
+
+    fn ref_with_replaced_span<S: crate::Span>(&self, span: S) -> Self::RefWithReplacedSpan<'_, S> {
+        IterTokensWithReplacedSpan(clone_into_iter::CloneIntoIter(&self.0), span)
+    }
+}
+
+mod clone_into_iter {
+    #[derive(Debug)]
+    pub struct CloneIntoIter<'a, I: Clone + IntoIterator>(pub(super) &'a I);
+
+    impl<'a, I: Clone + IntoIterator> Copy for CloneIntoIter<'a, I> {}
+    impl<'a, I: Clone + IntoIterator> Clone for CloneIntoIter<'a, I> {
+        fn clone(&self) -> Self {
+            *self
+        }
+    }
+
+    impl<'a, I: Clone + IntoIterator> IntoIterator for CloneIntoIter<'a, I> {
+        type Item = I::Item;
+
+        type IntoIter = I::IntoIter;
+
+        fn into_iter(self) -> Self::IntoIter {
+            I::into_iter(self.0.clone())
+        }
+    }
+}
