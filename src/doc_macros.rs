@@ -366,8 +366,8 @@ macro_rules! test_assert_impl_one_value {
     ) => {
         concat!(
             "```
-# \
-use std::rc::Rc;\
+# #![no_std]\
+extern crate alloc; use alloc::{boxed::Box, rc::Rc};\
 use proc_macro2 as proc_macro;\
 use typed_quote::{prelude::*, tokens::*, WithSpan, RefWithSpan, Either};\
 fn main() {\
