@@ -117,6 +117,15 @@ pub trait IntoTokenTree: IntoTokens + sealed::IntoTokenTree {
     fn into_token_tree(self) -> TokenTree;
     #[cfg(feature = "proc-macro2")]
     fn into_token_tree2(self) -> TokenTree2;
+
+    #[doc(hidden)]
+    #[cfg(feature = "alloc")]
+    #[cfg(feature = "proc-macro")]
+    fn box_into_token_tree(self: ::alloc::boxed::Box<Self>) -> TokenTree;
+    #[doc(hidden)]
+    #[cfg(feature = "alloc")]
+    #[cfg(feature = "proc-macro2")]
+    fn box_into_token_tree2(self: ::alloc::boxed::Box<Self>) -> TokenTree2;
 }
 
 /// To a token tree.
@@ -151,6 +160,17 @@ impl<T: ?Sized + ToTokenTree> IntoTokenTree for &T {
     #[cfg(feature = "proc-macro2")]
     fn into_token_tree2(self) -> TokenTree2 {
         T::to_token_tree2(self)
+    }
+
+    #[cfg(feature = "alloc")]
+    #[cfg(feature = "proc-macro")]
+    fn box_into_token_tree(self: ::alloc::boxed::Box<Self>) -> TokenTree {
+        T::to_token_tree(&self)
+    }
+    #[cfg(feature = "alloc")]
+    #[cfg(feature = "proc-macro2")]
+    fn box_into_token_tree2(self: ::alloc::boxed::Box<Self>) -> TokenTree2 {
+        T::to_token_tree2(&self)
     }
 }
 
@@ -824,10 +844,27 @@ macro_rules! impl_into_token_tree {
 
             $into
         }
+
+        crate::impl_box_into_token_tree! {}
     };
     (to) => {
         crate::impl_into_token_tree! {
             |self| crate::into_st::IntoST::<_>::into_st(&self)
+        }
+    };
+}
+
+macro_rules! impl_box_into_token_tree {
+    () => {
+        #[cfg(feature = "alloc")]
+        #[cfg(feature = "proc-macro")]
+        fn box_into_token_tree(self: ::alloc::boxed::Box<Self>) -> ::proc_macro::TokenTree {
+            Self::into_token_tree(*self)
+        }
+        #[cfg(feature = "alloc")]
+        #[cfg(feature = "proc-macro2")]
+        fn box_into_token_tree2(self: ::alloc::boxed::Box<Self>) -> ::proc_macro2::TokenTree {
+            Self::into_token_tree2(*self)
         }
     };
 }
@@ -866,8 +903,8 @@ macro_rules! expand_or {
 }
 
 use {
-    expand_or, impl_box_into_tokens, impl_into_token_tree, impl_into_tokens, impl_many,
-    impl_ref_with_span, impl_to_token_tree, impl_to_tokens,
+    expand_or, impl_box_into_token_tree, impl_box_into_tokens, impl_into_token_tree,
+    impl_into_tokens, impl_many, impl_ref_with_span, impl_to_token_tree, impl_to_tokens,
 };
 
 #[cfg(any(feature = "proc-macro", feature = "proc-macro2"))]
