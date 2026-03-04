@@ -1,5 +1,11 @@
 # typed-quote
 
+[<img alt="github" src="https://img.shields.io/github/stars/EqualMa/typed-quote?style=for-the-badge&color=7AADE1&logo=github" height="20">](https://github.com/EqualMa/typed-quote)
+[<img alt="docs.rs" src="https://img.shields.io/crates/v/typed-quote?style=for-the-badge&logo=rust" height="20">](https://crates.io/crates/typed-quote)
+[<img alt="docs.rs" src="https://img.shields.io/docsrs/typed-quote?style=for-the-badge&logo=docs.rs" height="20">](https://docs.rs/typed-quote)
+[<img alt="Crates.io MSRV" src="https://img.shields.io/crates/msrv/typed-quote?style=for-the-badge" height="20">](https://github.com/EqualMa/typed-quote/blob/main/Cargo.toml#L10)
+[<img alt="build status" src="https://img.shields.io/github/actions/workflow/status/EqualMa/typed-quote/ci.yml?style=for-the-badge" height="20">](https://github.com/EqualMa/typed-quote/actions)
+
 A fully typed [quote!()](https://docs.rs/quote) alternative
 for both [proc-macro](https://doc.rust-lang.org/stable/proc_macro/)
 and [proc-macro2](https://docs.rs/proc-macro2).
