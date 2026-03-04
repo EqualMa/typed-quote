@@ -329,7 +329,7 @@ pub use quote as typed_quote;
 // https://docs.rs/quote/latest/src/quote/lib.rs.html#1016
 #[macro_export]
 macro_rules! quote_token {
-    ($ident:ident) => {{
+    ($ident:ident) => {const {
         enum Ident {}
         impl $crate::tokens::HasConstIdent for Ident {
             const IDENT: $crate::tokens::Ident<'static> =
@@ -358,7 +358,7 @@ macro_rules! quote_token {
             delimiter_span: $crate::maybe_span::NoSpan,
         }
     };
-    ($lit:literal) => {{
+    ($lit:literal) => {const {
         enum Literal {}
         impl $crate::tokens::HasConstLiteral for Literal {
             const LITERAL: $crate::tokens::Literal<'static> =
@@ -495,7 +495,7 @@ macro_rules! quote_token {
     (-=) => {
         $crate::tokens::puncts::SubEq($crate::maybe_span::NoSpan)
     };
-    ($lifetime:lifetime) => {{
+    ($lifetime:lifetime) => {const {
         enum Lifetime {}
 
         impl $crate::tokens::HasConstLifetime for Lifetime {
