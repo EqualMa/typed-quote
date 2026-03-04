@@ -1,3 +1,4 @@
+#[allow(unused)]
 struct TestOk;
 
 macro_rules! assert_underscore_not_ident {

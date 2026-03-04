@@ -6,6 +6,7 @@ use typed_quote::{IntoTokens, WithSpan, quote};
 extern crate proc_macro;
 
 #[cfg(feature = "proc-macro")]
+#[allow(unused)]
 fn compile_only() {
     let lit = proc_macro::Literal::string("hello");
     let ts = quote!(compile_error! { #lit }).into_token_stream();
