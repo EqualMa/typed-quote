@@ -14,6 +14,12 @@ impl<T: HasConstIdent + ?Sized> ConstIdent<T> {
     }
 }
 
+impl<T: HasConstIdent + ?Sized, S: MaybeSpan> ConstIdent<T, S> {
+    pub const fn as_ident(self) -> Ident<'static, S> {
+        Ident(T::IDENT.0, self.1)
+    }
+}
+
 // not public api
 pub enum Underscore {}
 

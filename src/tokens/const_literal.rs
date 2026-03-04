@@ -14,6 +14,12 @@ impl<T: HasConstLiteral + ?Sized> ConstLiteral<T> {
     }
 }
 
+impl<T: HasConstLiteral + ?Sized, S: MaybeSpan> ConstLiteral<T, S> {
+    pub const fn as_literal(self) -> Literal<'static, S> {
+        Literal(T::LITERAL.0, self.1)
+    }
+}
+
 impl<T: HasConstLiteral + ?Sized, S: MaybeSpan> Copy for ConstLiteral<T, S> {}
 impl<T: HasConstLiteral + ?Sized, S: MaybeSpan> Clone for ConstLiteral<T, S> {
     fn clone(&self) -> Self {

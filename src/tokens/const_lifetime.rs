@@ -14,6 +14,12 @@ impl<T: HasConstLifetime + ?Sized> ConstLifetime<T> {
     }
 }
 
+impl<T: HasConstLifetime + ?Sized, S: MaybeSpan> ConstLifetime<T, S> {
+    pub const fn as_lifetime(self) -> Lifetime<'static, S> {
+        Lifetime(T::LIFETIME.0, self.1)
+    }
+}
+
 impl<T: HasConstLifetime + ?Sized, S: MaybeSpan> Copy for ConstLifetime<T, S> {}
 impl<T: HasConstLifetime + ?Sized, S: MaybeSpan> Clone for ConstLifetime<T, S> {
     fn clone(&self) -> Self {
