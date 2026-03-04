@@ -1,0 +1,42 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Develop",
+      "dependsOn": ["Test", "DocTest", "Docs"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      // Ctrl+Shift+B or Cmd+Shift+B
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "type": "shell",
+      "group": "test",
+      "command": "cargo watch -c -- cargo test --all-features --lib --bins --tests",
+      "problemMatcher": "$rustc-watch",
+      "isBackground": true,
+      "label": "Test"
+    },
+    {
+      "type": "shell",
+      "group": "test",
+      "command": "cargo watch -c -- cargo test --doc --all-features",
+      "problemMatcher": "$rustc-watch",
+      "isBackground": true,
+      "label": "DocTest"
+    },
+    {
+      "type": "shell",
+      "group": "build",
+      "command": "cargo watch -c -- cargo +nightly docs-rs",
+      "problemMatcher": "$rustc-watch",
+      "isBackground": true,
+      "label": "Docs"
+    }
+  ]
+}
