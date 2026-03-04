@@ -5,6 +5,37 @@
     not(doctest),
 ), doc = include_str!("../README.md"))]
 
+//! ## Cheat sheet
+//!
+//! <style>
+//! .inner-code-bg-transparent code {background:transparent}
+//! .cell-full-of-code {padding:0 !important}
+//! .cell-full-of-code > div pre, .cell-full-of-code > div code {background:transparent}
+//! .cell-full-of-code > div {margin:0 !important}
+//! .cell-full-of-code > div:not(:last-child) > pre {padding-bottom:0 !important}
+//! </style>
+//!
+//! <div><table>
+//! <tr><th>Type</th><th>derived Traits</th><th>value examples</th></tr>
+#![cfg_attr(
+    all(any(doc, doctest, test), feature = "alloc", feature = "proc-macro2"),
+    doc = crate::doc_macros::doc_cheat_sheet!(),
+)]
+#![cfg_attr(
+    not(all(any(doc, doctest, test), feature = "alloc", feature = "proc-macro2")),
+    doc = concat!("\
+ <tr><td colspan=3>
+
+ Please see [docs.rs](\
+ https://docs.rs/typed-quote/latest/typed-quote/index.html#cheat-sheet)
+
+ </td></tr>")
+)]
+//! </table></div>
+
+#[cfg(all(any(doc, doctest, test), feature = "alloc", feature = "proc-macro2"))]
+mod doc_macros;
+
 #[cfg(feature = "alloc")]
 extern crate alloc;
 
