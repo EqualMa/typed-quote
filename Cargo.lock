@@ -12,6 +12,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "test-proc-macro"
+version = "0.1.0"
+dependencies = [
+ "typed-quote",
+]
+
+[[package]]
 name = "typed-quote"
 version = "0.1.0"
 dependencies = [

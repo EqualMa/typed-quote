@@ -49,6 +49,7 @@ jobs:
       - run: cargo test  --features proc-macro2
       - run: cargo build --all-features
       - run: cargo test  --all-features
+      - run: cargo test -p test-proc-macro
       - uses: actions/upload-artifact@v6
         if: matrix.rust == 'nightly' && always()
         with:
@@ -115,7 +116,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@clippy
-      - run: cargo clippy --all-targets --all-features -- -W clippy::cargo -D warnings
+      - run: cargo clippy --all-targets --all-features --workspace -- -W clippy::cargo -D warnings
 
   outdated:
     name: Outdated

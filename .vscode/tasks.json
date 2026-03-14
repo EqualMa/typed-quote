@@ -17,7 +17,7 @@
     {
       "type": "shell",
       "group": "test",
-      "command": "cargo watch -c -- cargo test --all-features --lib --bins --tests",
+      "command": "cargo watch -c -- cargo test --all-features --workspace --lib --bins --tests",
       "problemMatcher": "$rustc-watch",
       "isBackground": true,
       "label": "Test"
@@ -25,7 +25,7 @@
     {
       "type": "shell",
       "group": "test",
-      "command": "cargo watch -c -- cargo test --doc --all-features",
+      "command": "cargo watch -c -- cargo test --doc --all-features --workspace",
       "problemMatcher": "$rustc-watch",
       "isBackground": true,
       "label": "DocTest"
