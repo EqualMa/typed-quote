@@ -409,14 +409,6 @@ macro_rules! quote_token {
             delimiter_span: $crate::maybe_span::NoSpan,
         }
     };
-    ($lit:literal) => {const {
-        enum Literal {}
-        impl $crate::tokens::HasConstLiteral for Literal {
-            const LITERAL: $crate::tokens::Literal<'static> =
-                $crate::tokens::__private::literal($crate::tokens::__private::stringify!($lit));
-        }
-        $crate::tokens::ConstLiteral::<Literal>::new()
-    }};
     (#) => {
         $crate::tokens::punct::Pound($crate::maybe_span::NoSpan)
     };
@@ -565,6 +557,14 @@ macro_rules! quote_token {
     (~) => {
         $crate::tokens::punct::Tilde($crate::maybe_span::NoSpan)
     };
+    ($lit:literal) => {const {
+        enum Literal {}
+        impl $crate::tokens::HasConstLiteral for Literal {
+            const LITERAL: $crate::tokens::Literal<'static> =
+                $crate::tokens::__private::literal($crate::tokens::__private::stringify!($lit));
+        }
+        $crate::tokens::ConstLiteral::<Literal>::new()
+    }};
 }
 
 pub mod maybe_span;
