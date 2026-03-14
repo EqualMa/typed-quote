@@ -8,4 +8,4 @@ publish = false
 proc-macro = true
 
 [dependencies]
-typed-quote = { version = "0.1.0", path = "../..", features = ["proc-macro"] }
+typed-quote = { version = "0.1.1", path = "../..", features = ["proc-macro"] }

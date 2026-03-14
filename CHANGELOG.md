@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1](https://github.com/EqualMa/typed-quote/compare/typed-quote-v0.1.0...typed-quote-v0.1.1) - 2026-03-14
+
+### Fixed
+
+- `$lit:literal` should matched after `-`
+
+### Other
+
+- disable test for test-proc-macro on msrv (1.86.0)
+- test proc-macro
+- setup Trusted Publishing
+
 ## [0.1.0](https://github.com/EqualMa/typed-quote/releases/tag/v0.1.0) - 2026-03-04
 
 ### Added
