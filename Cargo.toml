@@ -1,6 +1,6 @@
 [package]
 name = "typed-quote"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "A fully typed quote!() alternative for both proc-macro and proc-macro2"
 license = "MIT OR Apache-2.0"
